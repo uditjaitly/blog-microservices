@@ -1,10 +1,10 @@
 import React, {useEffect,useState} from 'react'
 import axios from 'axios'
-const CommentList=({postID})=>{
+const CommentList=({postId})=>{
     const [commentList,setCommentList]=useState([]);
 
     const getComments=async()=>{
-        const reply=await axios.get('http://localhost:4001/posts/123/comments')
+        const reply=await axios.get('http://localhost:4001/posts/'+postId+'/comments')
         setCommentList(reply.data)
     }
 

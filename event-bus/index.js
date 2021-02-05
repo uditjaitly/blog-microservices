@@ -10,6 +10,17 @@ app.post('/events/',async (req,res)=>{
     await axios.post('http://localhost:4000/events',event)
     await axios.post('http://localhost:4001/events',event)
     await axios.post('http://localhost:4002/events',event)
+    
+    if(event.type==="Comment Created"){
+        await axios.post('http://localhost:4003/events',event)
+    }
+
+    if(event.type==="Comment Moderated"){
+        await axios.post('http://localhost:4001/events',event)
+    }
+    if(event.type==="Comment Updated"){
+        await axios.post('http://localhost:4002/event)',event)
+    }
 
     res.send("Done")
 

@@ -25,8 +25,8 @@ const Posts = () =>{
                         
                         <div >
                             <h3>{post.title}</h3>
-                            <CommentList postID={post.id}/>
-                            <CommentCreate/>
+                            <CommentList postId={post.id}/>
+                            <CommentCreate postId={post.id}/>
                         </div>
                     </div>)
             })}
