@@ -20,16 +20,21 @@ app.post('/posts/:id/comments',async(req,res)=>{
     const comments=commentsByPostId[req.params.id] || []
     comments.push({id:commentId,content:content, status:'pending'})
     commentsByPostId[req.params.id]=comments
-    await axios.post('http://localhost:4010/events',{
-        type:"Comment Created",
-        data:{
-            id:commentId,
-            content:content,
-            postId:req.params.id,
-            status:'pending'
-
-        }
-    })
+    try{
+        await axios.post('http://eventbus-srv:4010/events',{
+            type:"Comment Created",
+            data:{
+                id:commentId,
+                content:content,
+                postId:req.params.id,
+                status:'pending'
+    
+            }
+        })
+    }
+    catch(e){
+        return res.send(e)
+    }
     res.status(201).send(commentsByPostId[req.params.id])
 })
 
@@ -42,12 +47,17 @@ app.post('/events/',async (req,res)=>{
             return comment.id===id;
         })
         comment.status=status;
-        await axios.post('http://localhost:4010/events',{
-            type:"Comment Updated",
-            data:{
-                id,postId,status,content
-            }
-        })
+        try{
+            await axios.post('http://localhost:4010/events',{
+                type:"Comment Updated",
+                data:{
+                    id,postId,status,content
+                }
+            })
+        }
+        catch(e){
+            return res.send(e)
+        }
     }
     res.send({})
 })

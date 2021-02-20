@@ -18,8 +18,18 @@ const CommentList=({postId})=>{
         <div>
             <p>{commentList.length} Comments</p>
             {commentList.map((comment)=>{
+                let cmt
+                if(comment.status==="pending"){
+                    cmt="Awaiting Moderation"
+                }
+                else if(comment.status==="approved"){
+                    cmt=comment.content
+                }
+                else if(comment.status==="rejected"){
+                    cmt="Comment Banned"
+                }
                 return (<div key={comment.id}>
-                        <p>{comment.content}</p>
+                        <p>{cmt}</p>
                     
                     </div>)
             })}
