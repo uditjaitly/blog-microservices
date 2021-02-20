@@ -15,7 +15,6 @@ spec:
       containers:
         - name: moderation
           image: uditjaitly/moderation
-
 ---
 apiVersion: v1
 kind: Service

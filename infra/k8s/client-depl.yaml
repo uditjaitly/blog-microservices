@@ -1,31 +1,30 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: eventbus-depl
+  name: client-depl
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: eventbus
+      app: client
   template:
     metadata:
       labels:
-        app: eventbus
+        app: client
     spec:
       containers:
-        - name: eventbus
-          image: uditjaitly/event-bus
-
+        - name: client
+          image: uditjaitly/client
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: eventbus-srv
+  name: client-srv
 spec:
   selector:
-    app: eventbus
+    app: client
   ports:
-    - name: eventbus
+    - name: client
       protocol: TCP
-      port: 4010
-      targetPort: 4010
+      port: 3000
+      targetPort: 3000

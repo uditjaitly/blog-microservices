@@ -1,45 +1,47 @@
 const express = require("express");
-const cors = require("cors");
 const bodyParser = require("body-parser");
 const { randomBytes } = require("crypto");
+const cors = require("cors");
 const axios = require("axios");
+
 const app = express();
-const posts = {};
 app.use(bodyParser.json());
 app.use(cors());
-axios.defaults.headers.common = {
-  "Content-Type": "application/json",
-};
 
-app.get("/posts/", async (req, res) => {
+const posts = {};
+
+app.get("/posts", (req, res) => {
   res.send(posts);
 });
 
-app.post("/posts/", async (req, res) => {
+app.post("/posts/create", async (req, res) => {
   const id = randomBytes(4).toString("hex");
-  const title = req.body.title;
+  const { title } = req.body;
+
   posts[id] = {
-    id: id,
-    title: title,
+    id,
+    title,
   };
-  try{
-    await axios.post("http://eventbus-srv:4010/events/", {
-        type: "Post Created",
-        data: {
-          id,
-          title,
-        },
-      });
-  }  catch(e){
-      return res.send(e);
-  }
+  try {
+    await axios.post("http://event-bus-srv:4005/events", {
+      type: "PostCreated",
+      data: {
+        id,
+        title,
+      },
+    });
+  } catch (e) {}
+
   res.status(201).send(posts[id]);
 });
 
-app.post("/events/", (req, res) => {
-  console.log("Received event", req.body.type);
+app.post("/events", (req, res) => {
+  console.log("Received Event", req.body.type);
+
   res.send({});
 });
+
 app.listen(4000, () => {
-  console.log("Listening on port 4000");
+  console.log("v55");
+  console.log("Listening on 4000");
 });
